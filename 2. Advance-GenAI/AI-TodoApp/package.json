@@ -3,6 +3,11 @@
   "module": "server.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^25.5.0",
