@@ -8,7 +8,7 @@ import { todosTable } from './db/schema';
 type Todo = {
     todo: string;
     isCompleted: boolean;
-}
+};
 
 async function addTodo({ todo, isCompleted = false }: Todo) {
     todo = todo.trim();
@@ -32,7 +32,7 @@ async function toggleTodo({ id }: { id: number }) {
        .set({ isCompleted: true })
        .where(eq(todosTable.id, id)); 
     return result;
-}
+};
 
 async function searchTodo({ search }: { search: string }) {
     const todos = await db
@@ -40,7 +40,7 @@ async function searchTodo({ search }: { search: string }) {
         .from(todosTable)
         .where(like(todosTable.todo, `%${search}%`));
     return todos;
-}
+};
 
 async function getAllTodos(){
     const todos = await db.select()
@@ -48,14 +48,22 @@ async function getAllTodos(){
     return todos;
 };
 
-export const tools = {
+const tools = {
     getAllTodos: getAllTodos,
     addTodo: addTodo,
     toggleTodo: toggleTodo,
     deleteTodo: deleteTodo,
     searchTodo: searchTodo,
-}
+};
 
+/**
+ * System prompt that defines the AI agent's behavior and response format
+ * This instructs the AI to:
+ * - Act as a todo list assistant
+ * - Follow a strict JSON output format
+ * - Follow a plan -> action -> observation -> output workflow
+ * - Only output specific JSON structures
+ */
 export const systemPrompt = `
     You are an AI To-Do list Assistant. You can manage tasks by adding, viewing, updating, and deleting tasks.
     You must strictly follow the JSON output format. Respond with ONLY ONE JSON object per message. Do not add any text before or after the JSON block.
@@ -90,32 +98,51 @@ export const systemPrompt = `
     { "type": "output", "output": "Task added successfully." }
 `
 
-
 const client = new Groq({ 
     apiKey: process.env.GROQ_API_KEY 
 });
 
-export const messages: ChatCompletionMessageParam[] = [{ role: "system", content: systemPrompt}];
+// Initialize conversation history with the system prompt
+const messages: ChatCompletionMessageParam[] = [{ 
+    role: "system", 
+    content: systemPrompt
+}];
 
-export async function run() {
+/**
+ * Main function that runs the interactive todo assistant
+ * Handles the conversation loop, user input, and AI interactions
+ */
+async function run() {
+  // Main loop - continues until the program is terminated
   while (true) {
+    // Get user input from the console
     const query = readlineSync.question(">> ");
+    // Format user message as JSON
     const userMessage = {
       type: 'user',
       user: query
     };
 
-    messages.push({ role: 'user', content: JSON.stringify(userMessage) });
+    // Add user message to conversation history
+    messages.push({ 
+      role: 'user', 
+      content: JSON.stringify(userMessage) 
+    });
 
+    // Inner loop - handles the AI's multi-step reasoning for a single user query
     while (true) {
+      // Send conversation history to the AI model
       const response = await client.chat.completions.create({
         model: "openai/gpt-oss-120b",
         messages: messages,
-        tool_choice: "auto",
+        tool_choice: "auto", // Let the model decide when to use tools
       });
-      const result = response.choices[0]?.message.content;
-      if (!result) break;
 
+      // Extract the AI's response content
+      const result = response.choices[0]?.message.content;
+      if (!result) break; // Break if no response received
+
+      // Add AI response to conversation history
       messages.push({
         role: 'assistant',
         content: result
@@ -123,32 +150,45 @@ export async function run() {
 
       let action;
       try {
-        // Strip out markdown code block delimiters and parse the entire result
+        // Clean the response by removing markdown code block markers if present
         const cleaned = result.replace(/```(?:json)?/g, '').trim();
+
+        // Parse the JSON response
         action = JSON.parse(cleaned);
       } catch {
+        // If JSON parsing fails, log error and continue to next iteration
         console.log("Failed to parse response:", result);
         continue;
-      }
+      };
 
+      // Handle different response types from the AI
       if (action.type === 'output') {
+        // Output message to user and break inner loop to wait for next user input
         console.log(`🤖: ${action.output}`);
         break;
-      } else if (action.type === 'action') {
+      } 
+      else if (action.type === 'action') {
+        // Execute a tool call
         const fn = (tools as any)[action.name];
         if (!fn) throw new Error('Invalid Tool Call');
 
+        // Execute the tool with the provided arguments
         const observation = await fn(action.args);
+        // Create observation message from the tool result
         const observationMessage = {
           type: 'observation',
           observation: observation
         };
+        // Add observation to conversation history for the AI to process
         messages.push({ role: 'user', content: JSON.stringify(observationMessage) });
-      } else if (action.type === 'plan') {
+      } 
+      else if (action.type === 'plan') {
+        // Display the AI's plan to the user and continue to next AI response
         console.log(`🧠 Plan: ${action.plan}`);
       }
-    }
-  }
-}
+    };
+  };
+};
 
+// Start the application
 run();
