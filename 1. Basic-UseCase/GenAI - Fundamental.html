@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM Fundamentals | Complete Guide to Modern AI Systems</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.7;
+    margin: 0;
+    background: #fafaf8;
+    color: #1a1a1a;
+}
+
+/* Book-style container */
+.book {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 0 40px rgba(0,0,0,0.05);
+}
+
+.page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 40px;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+h1 {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 32px;
+    margin-top: 48px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eaecef;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 24px;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #1e466e;
+}
+
+h4 {
+    font-size: 18px;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #2c5282;
+}
+
+p {
+    margin: 16px 0;
+    font-size: 17px;
+    color: #2c3e2f;
+}
+
+/* Lists */
+ul, ol {
+    margin: 16px 0 16px 28px;
+}
+
+li {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+/* Code blocks */
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px;
+    border-radius: 12px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 24px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #d14;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 15px;
+}
+
+th {
+    background: #f5f5f0;
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #e2e8e0;
+    font-weight: 600;
+}
+
+td {
+    padding: 10px 12px;
+    border: 1px solid #e2e8e0;
+}
+
+/* Info boxes */
+.note {
+    background: #f0f7ff;
+    border-left: 4px solid #3182ce;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.tip {
+    background: #f0fdf4;
+    border-left: 4px solid #2e7d32;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 8px;
+}
+
+.warning {
+    background: #fef5e7;
+    border-left: 4px solid #e67e22;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 8px;
+}
+
+/* Cover */
+.cover {
+    text-align: center;
+    padding: 100px 40px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.cover h1 {
+    font-size: 56px;
+    margin-bottom: 20px;
+    color: #1a3e60;
+}
+
+.cover .subtitle {
+    font-size: 20px;
+    color: #4a6a8a;
+    margin-bottom: 30px;
+}
+
+.cover .meta {
+    margin-top: 50px;
+    font-size: 14px;
+    color: #6c757d;
+    border-top: 1px solid #dee2e6;
+    padding-top: 30px;
+    display: inline-block;
+}
+
+/* Table of Contents */
+.toc {
+    margin: 30px 0;
+}
+
+.toc-item {
+    display: flex;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dotted #e9ecef;
+}
+
+.toc-number {
+    width: 50px;
+    font-weight: 600;
+    color: #2c5282;
+}
+
+.toc-title {
+    flex: 1;
+    font-size: 17px;
+}
+
+.toc-page {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.toc a {
+    text-decoration: none;
+    color: #2c3e2f;
+    display: block;
+    transition: color 0.2s;
+}
+
+.toc a:hover {
+    color: #2c5282;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid #e9ecef;
+    font-size: 13px;
+    color: #868e96;
+}
+
+/* Chapter break */
+.chapter {
+    page-break-before: always;
+    break-before: page;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+    }
+    .book {
+        box-shadow: none;
+        max-width: 100%;
+    }
+    .page {
+        padding: 40px 30px;
+    }
+    .cover {
+        background: white;
+    }
+    pre {
+        background: #f5f5f5;
+        color: #1a1a1a;
+        border: 1px solid #ddd;
+    }
+    .note, .tip, .warning {
+        border: 1px solid #ddd;
+        background: #fafafa;
+    }
+    @page {
+        size: A4;
+        margin: 2cm;
+    }
+    .chapter {
+        page-break-before: always;
+    }
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .page {
+        padding: 40px 24px;
+    }
+    h1 {
+        font-size: 36px;
+    }
+    h2 {
+        font-size: 28px;
+    }
+    pre {
+        font-size: 11px;
+        padding: 12px;
+    }
+}
+
+/* Badge styling */
+.badge {
+    display: inline-block;
+    background: #e9ecef;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-family: sans-serif;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.badge-blue {
+    background: #e6f2ff;
+    color: #1e466e;
+}
+
+.metrics-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.metric-card {
+    flex: 1;
+    min-width: 100px;
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+}
+
+.metric-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c5282;
+    font-family: sans-serif;
+}
+
+.metric-label {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="book">
+
+<!-- COVER PAGE -->
+<div class="page cover">
+    <h1>🤖 LLM Fundamentals</h1>
+    <div class="subtitle">A Complete Guide to Large Language Models<br>Prompt Engineering · RAG · Structured Outputs</div>
+    <div style="margin: 40px 0 20px;">
+        <span class="badge">Tokens</span>
+        <span class="badge">Temperature</span>
+        <span class="badge">Hallucination</span>
+        <span class="badge">Context</span>
+        <span class="badge">Prompt Design</span>
+        <span class="badge">Few-Shot</span>
+        <span class="badge">JSON Outputs</span>
+        <span class="badge">Zod</span>
+        <span class="badge">Embeddings</span>
+        <span class="badge">RAG</span>
+    </div>
+    <div class="meta">
+        Comprehensive Guide • Production Ready Patterns • Practical Examples
+    </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="page">
+    <h2>Contents</h2>
+    <div class="toc">
+        <div class="toc-item"><span class="toc-number">1</span><span class="toc-title"><a href="#ch1">Tokens — The Building Blocks</a></span></div>
+        <div class="toc-item"><span class="toc-number">2</span><span class="toc-title"><a href="#ch2">Temperature — Controlling Creativity</a></span></div>
+        <div class="toc-item"><span class="toc-number">3</span><span class="toc-title"><a href="#ch3">Hallucination — The Accuracy Challenge</a></span></div>
+        <div class="toc-item"><span class="toc-number">4</span><span class="toc-title"><a href="#ch4">Context Window — Memory Capacity</a></span></div>
+        <div class="toc-item"><span class="toc-number">5</span><span class="toc-title"><a href="#ch5">Prompt Design — The CO-STAR Framework</a></span></div>
+        <div class="toc-item"><span class="toc-number">6</span><span class="toc-title"><a href="#ch6">Few-Shot Learning — Examples as Instructions</a></span></div>
+        <div class="toc-item"><span class="toc-number">7</span><span class="toc-title"><a href="#ch7">Formatting & Instructions</a></span></div>
+        <div class="toc-item"><span class="toc-number">8</span><span class="toc-title"><a href="#ch8">JSON Outputs — Programmable Data</a></span></div>
+        <div class="toc-item"><span class="toc-number">9</span><span class="toc-title"><a href="#ch9">Zod Validation — Type-Safe Schemas</a></span></div>
+        <div class="toc-item"><span class="toc-number">10</span><span class="toc-title"><a href="#ch10">Validation & Retry Strategies</a></span></div>
+        <div class="toc-item"><span class="toc-number">11</span><span class="toc-title"><a href="#ch11">Embeddings — Semantic Representations</a></span></div>
+        <div class="toc-item"><span class="toc-number">12</span><span class="toc-title"><a href="#ch12">Vector Databases — Specialized Storage</a></span></div>
+        <div class="toc-item"><span class="toc-number">13</span><span class="toc-title"><a href="#ch13">RAG Architecture — Retrieval-Augmented Generation</a></span></div>
+        <div class="toc-item"><span class="toc-number">14</span><span class="toc-title"><a href="#ch14">Search Strategies & Optimization</a></span></div>
+    </div>
+</div>
+
+<!-- MODULE 32: LLM FUNDAMENTALS -->
+<div class="page chapter" id="ch1">
+    <h2>1. Tokens — The Building Blocks</h2>
+    <p>Tokens are the fundamental units of text processing in Large Language Models. They are not exactly words but rather chunks of text that models use as their basic input and output units. Understanding tokens is critical because <strong>pricing, rate limits, and context windows all depend on token counts</strong>.</p>
+    
+    <p>A useful rule of thumb: <strong>one token is roughly ¾ of an English word</strong>. This means 100 tokens translate to about 75 words. However, this varies by language and tokenization method. Different models use different tokenizers:</p>
+    
+    <ul>
+        <li><strong>OpenAI (GPT)</strong>: Uses <code>cl100k_base</code> with ~100,000 token vocabulary</li>
+        <li><strong>Claude (Anthropic)</strong>: Uses custom BPE-based tokenizer</li>
+        <li><strong>Open-source models</strong>: Often use GPT-2 tokenizer or SentencePiece</li>
+    </ul>
+
+    <div class="metrics-grid">
+        <div class="metric-card"><div class="metric-value">1 Token</div><div class="metric-label">≈ ¾ word</div></div>
+        <div class="metric-card"><div class="metric-value">100 Tokens</div><div class="metric-label">≈ 75 words</div></div>
+        <div class="metric-card"><div class="metric-value">128K</div><div class="metric-label">GPT-4 Turbo context</div></div>
+        <div class="metric-card"><div class="metric-value">200K</div><div class="metric-label">Claude 3 context</div></div>
+    </div>
+
+    <pre>
+// Tokenization example with tiktoken (OpenAI)
+import tiktoken
+
+enc = tiktoken.get_encoding("cl100k_base")
+tokens = enc.encode("Hello, world!")
+print(tokens)  // [9906, 11, 1917, 0]
+print(len(tokens))  // 4 tokens
+
+// "RAG systems combine retrieval and generation"
+// → 7 tokens</pre>
+
+    <div class="tip">
+        <strong>💡 Best Practice:</strong> Always reserve 10-20% of your context window for the model's response. If you have a 128K context limit, aim to keep input under 100K tokens to leave room for generation. Use token counting libraries like <code>tiktoken</code> (OpenAI) or <code>transformers</code> (Hugging Face) before sending requests.
+    </div>
+</div>
+
+<div class="page chapter" id="ch2">
+    <h2>2. Temperature — Controlling Creativity</h2>
+    <p>Temperature is a parameter that controls the randomness and creativity of model outputs. It works by scaling the logits before applying the softmax function — essentially <strong>reshaping the probability distribution of possible next tokens</strong>.</p>
+
+    <table>
+        <thead><tr><th>Temperature Range</th><th>Behavior</th><th>Best For</th></tr></thead>
+        <tbody>
+            <tr><td><strong>0.0 – 0.3</strong></td><td>Deterministic, focused, consistent</td><td>Code generation, data extraction, factual QA</td></tr>
+            <tr><td><strong>0.4 – 0.7</strong></td><td>Balanced, naturally creative</td><td>General conversation, content writing, summarization</td></tr>
+            <tr><td><strong>0.8 – 1.2</strong></td><td>Highly creative, varied, surprising</td><td>Storytelling, brainstorming, poetry, ideation</td></tr>
+        </tbody>
+    </table>
+
+    <pre>
+// Temperature effect visualization
+T=0.0: "The cat sat on the mat."        // deterministic
+T=0.5: "The fluffy cat sat on the warm mat."  // balanced
+T=1.0: "A sleepy feline perched atop the woven rug." // creative</pre>
+
+    <div class="note">
+        <strong>📊 Top P (Nucleus Sampling):</strong> An alternative to temperature. It selects from the smallest set of tokens whose cumulative probability exceeds a threshold (e.g., top_p=0.9). Often used in combination with temperature for more controlled randomness. For most production applications, temperature between 0.1 and 0.5 offers the best balance of reliability and natural language flow.
+    </div>
+</div>
+
+<div class="page chapter" id="ch3">
+    <h2>3. Hallucination — The Accuracy Challenge</h2>
+    <p>Hallucination occurs when LLMs generate plausible-sounding but factually incorrect or nonsensical information. This is one of the fundamental challenges in deploying LLMs in production. Even state-of-the-art models like GPT-4 hallucinate approximately <strong>15-20% of the time</strong> on complex factual queries.</p>
+
+    <h3>Types of Hallucinations</h3>
+    <ul>
+        <li><strong>Factual hallucinations:</strong> Incorrect dates, names, events, or statistics</li>
+        <li><strong>Logical hallucinations:</strong> Contradictory reasoning or impossible scenarios</li>
+        <li><strong>Contextual hallucinations:</strong> Ignoring or misinterpreting provided context</li>
+        <li><strong>Extrinsic hallucinations:</strong> Adding details not present in source material</li>
+    </ul>
+
+    <div class="warning">
+        <strong>⚠️ Critical Warning:</strong> Never trust LLM outputs for critical decisions without validation. For production applications, always combine LLM generation with verification layers, citation systems, and human-in-the-loop for high-stakes decisions.
+    </div>
+
+    <h3>Mitigation Strategies</h3>
+    <ul>
+        <li><strong>RAG (Retrieval-Augmented Generation):</strong> Ground responses in retrieved documents</li>
+        <li><strong>Lower temperature:</strong> Reduce randomness for factual tasks</li>
+        <li><strong>System prompts:</strong> "Only answer if you are confident" or "If uncertain, say 'I don't know'"</li>
+        <li><strong>Chain of Thought:</strong> Force reasoning steps before final answer</li>
+        <li><strong>Self-consistency:</strong> Generate multiple responses and vote</li>
+        <li><strong>Output validation:</strong> Use secondary models or rule-based checks</li>
+    </ul>
+</div>
+
+<div class="page chapter" id="ch4">
+    <h2>4. Context Window — Memory Capacity</h2>
+    <p>The context window defines the total number of tokens a model can process in a single interaction — including both input and output tokens. This is essentially the model's "working memory." Different models offer vastly different capacities:</p>
+
+    <table>
+        <thead><tr><th>Model</th><th>Context Window</th><th>≈ Pages of Text</th></tr></thead>
+        <tbody>
+            <tr><td>GPT-3.5 Turbo</td><td>16K tokens</td><td>~24 pages</td></tr>
+            <tr><td>GPT-4 Turbo</td><td>128K tokens</td><td>~192 pages</td></tr>
+            <tr><td>Claude 3 Opus/Sonnet</td><td>200K tokens</td><td>~300 pages</td></tr>
+            <tr><td>Gemini 1.5 Pro</td><td>1M tokens</td><td>~1,500 pages</td></tr>
+            <tr><td>Llama 3</td><td>8K – 128K tokens</td><td>Varies by variant</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Context Management Strategies</h3>
+    <ul>
+        <li><strong>Sliding Window:</strong> Keep only recent conversation history, drop older messages</li>
+        <li><strong>Summarization:</strong> Compress old context into concise summaries</li>
+        <li><strong>RAG:</strong> Retrieve only relevant context instead of including everything</li>
+        <li><strong>Chunking:</strong> Break long documents into manageable pieces (512-1024 tokens with 10-20% overlap)</li>
+        <li><strong>Hierarchical Summarization:</strong> Summarize sections, then summarize summaries</li>
+    </ul>
+
+    <div class="tip">
+        <strong>💡 Golden Rule:</strong> Always leave room for output tokens. A good rule of thumb is to reserve 10-20% of your context window for the model's response to prevent truncation.
+    </div>
+</div>
+
+<!-- MODULE 33: PROMPT ENGINEERING -->
+<div class="page chapter" id="ch5">
+    <h2>5. Prompt Design — The CO-STAR Framework</h2>
+    <p>Prompt engineering is the art and science of crafting effective inputs to get desired outputs from LLMs. The <strong>CO-STAR framework</strong> provides a structured approach to prompt design:</p>
+
+    <ul>
+        <li><strong>C (Context):</strong> Background information and relevant details</li>
+        <li><strong>O (Objective):</strong> Clear goal of what the prompt should achieve</li>
+        <li><strong>S (Style):</strong> Desired tone, format, and presentation</li>
+        <li><strong>T (Tone):</strong> Attitude and voice (professional, friendly, authoritative)</li>
+        <li><strong>A (Audience):</strong> Who the output is intended for</li>
+        <li><strong>R (Response):</strong> Desired output structure and format</li>
+    </ul>
+
+    <pre>
+&lt;system&gt;
+You are a technical documentation writer specializing in AI systems.
+&lt;/system&gt;
+
+&lt;task&gt;
+Explain RAG (Retrieval-Augmented Generation) to beginners.
+&lt;/task&gt;
+
+&lt;constraints&gt;
+- Use simple analogies
+- Keep under 100 words
+- Include a real-world example
+&lt;/constraints&gt;
+
+&lt;format&gt;
+Return as markdown with bullet points.
+&lt;/format&gt;</pre>
+
+    <div class="note">
+        <strong>🎯 Key Components of Effective Prompts:</strong> Role/Persona assignment, clear task description, relevant context, explicit constraints (length, format, style), and optional examples.
+    </div>
+</div>
+
+<div class="page chapter" id="ch6">
+    <h2>6. Few-Shot Learning — Examples as Instructions</h2>
+    <p>Few-shot learning involves providing examples within the prompt to demonstrate the desired pattern or behavior. This technique dramatically improves accuracy by showing the model exactly what you want.</p>
+
+    <h3>Types of Shot Learning</h3>
+    <ul>
+        <li><strong>Zero-shot:</strong> No examples, just instruction</li>
+        <li><strong>One-shot:</strong> Single example</li>
+        <li><strong>Few-shot:</strong> 2-10 examples (optimal for most use cases)</li>
+        <li><strong>Many-shot:</strong> 10+ examples (enabled by large context windows)</li>
+    </ul>
+
+    <pre>
+// Few-shot example: Sentiment classification
+
+Input: "I absolutely love this product!" → Positive
+Input: "This is the worst experience ever." → Negative
+Input: "It's okay, nothing special." → Neutral
+Input: "Could not be happier with my purchase!" → Positive
+Input: "This is terrible quality." → 
+
+// Model predicts: Negative</pre>
+
+    <div class="tip">
+        <strong>📊 Research Insight:</strong> Few-shot prompting improves accuracy by <strong>20-40%</strong> on complex tasks compared to zero-shot. Best practices include using diverse examples that cover edge cases, formatting examples consistently, and including 3-5 examples for optimal results.
+    </div>
+</div>
+
+<div class="page chapter" id="ch7">
+    <h2>7. Formatting & Instructions</h2>
+    <p>Using structure and delimiters organizes prompts for better comprehension. The way you format your prompt significantly impacts output quality.</p>
+
+    <h3>Formatting Techniques</h3>
+    <ul>
+        <li><strong>XML tags:</strong> <code>&lt;instruction&gt;</code>, <code>&lt;context&gt;</code>, <code>&lt;example&gt;</code> — most reliable across models</li>
+        <li><strong>Delimiters:</strong> Triple backticks (<code>```</code>), triple quotes (<code>"""</code>), dashes (<code>---</code>)</li>
+        <li><strong>Markdown:</strong> Headers, lists, code blocks for human-readable structure</li>
+        <li><strong>JSON structure:</strong> For machine-readable inputs</li>
+    </ul>
+
+    <h3>Instruction Best Practices</h3>
+    <ul>
+        <li><strong>Role assignment:</strong> "Act as a senior software architect"</li>
+        <li><strong>Constraint definition:</strong> "Answer in 2-3 sentences only"</li>
+        <li><strong>Process guidance:</strong> "Think step-by-step before answering" (Chain of Thought)</li>
+        <li><strong>Negative instructions:</strong> "Do NOT include any markdown formatting"</li>
+        <li><strong>Output specification:</strong> "Return as valid JSON"</li>
+    </ul>
+
+    <pre>
+❌ Vague: "Write about AI"
+
+✅ Clear: "Write a 100-word overview of RAG systems for a technical audience.
+Include: 1) Definition, 2) Key components, 3) One use case with real-world example.
+Use bullet points and maintain a professional tone."</pre>
+
+    <div class="note">
+        <strong>🧠 Chain of Thought (CoT):</strong> Instruct the model to reason step-by-step. This technique improves accuracy on complex reasoning tasks by 30-50%. Example: "Let's approach this step by step. First, identify the problem. Second, consider possible solutions. Third, evaluate trade-offs."
+    </div>
+</div>
+
+<!-- MODULE 34: STRUCTURED OUTPUTS & VALIDATION -->
+<div class="page chapter" id="ch8">
+    <h2>8. JSON Outputs — Programmable Data from LLMs</h2>
+    <p>Getting LLMs to return structured JSON data enables reliable programmatic consumption and integration with existing systems.</p>
+
+    <h3>Methods for Structured Outputs</h3>
+    <ul>
+        <li><strong>OpenAI Function Calling:</strong> Native structured output support with schema validation</li>
+        <li><strong>JSON Mode:</strong> Parameter that forces valid JSON output (<code>response_format: { "type": "json_object" }</code>)</li>
+        <li><strong>Prompt Engineering:</strong> Explicit schema definition in the prompt</li>
+        <li><strong>Constrained Decoding:</strong> Grammar-based generation (e.g., Guidance, Outlines)</li>
+    </ul>
+
+    <pre>
+{
+  "user": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "age": 30,
+    "role": "developer",
+    "active": true
+  },
+  "skills": ["Python", "JavaScript", "Rust", "TypeScript"],
+  "experience_years": 8,
+  "location": {
+    "city": "San Francisco",
+    "country": "USA"
+  }
+}</pre>
+
+    <div class="tip">
+        <strong>🎯 Best Practice:</strong> Always specify the exact JSON schema in your prompt and provide an example response. When using OpenAI, combine <code>response_format: { "type": "json_object" }</code> with function calling for highest reliability.
+    </div>
+</div>
+
+<div class="page chapter" id="ch9">
+    <h2>9. Zod Validation — Type-Safe Schema Validation</h2>
+    <p>Zod is a TypeScript-first schema validation library that ensures LLM outputs match expected structure. It provides runtime validation with detailed error messages and automatic TypeScript type inference.</p>
+
+    <pre>
+import { z } from 'zod';
+
+// Define schema
+const UserResponseSchema = z.object({
+  name: z.string().min(1).max(100),
+  email: z.string().email(),
+  age: z.number().int().positive().max(120).optional(),
+  role: z.enum(['admin', 'user', 'guest']),
+  skills: z.array(z.string()).max(10),
+  metadata: z.object({
+    confidence: z.number().min(0).max(1),
+    sources: z.array(z.string()).optional()
+  }).optional()
+});
+
+// Validate LLM output
+const result = UserResponseSchema.safeParse(llmOutput);
+
+if (!result.success) {
+  console.log('Validation errors:', result.error.format());
+  // Trigger retry with error feedback
+  // OR escalate to human review
+} else {
+  // Type-safe result.data with full TypeScript inference
+  const validatedData = result.data;
+}</pre>
+
+    <div class="note">
+        <strong>✨ Zod Features:</strong> Type inference (TypeScript types automatically derived from schemas), runtime validation with detailed errors, complex validations (email, URL, regex), transform and refine capabilities, and support for nested objects, arrays, and unions.
+    </div>
+</div>
+
+<div class="page chapter" id="ch10">
+    <h2>10. Validation & Retry Strategies</h2>
+    <p>Systematic verification of LLM outputs requires multiple validation layers and robust retry mechanisms for production reliability.</p>
+
+    <h3>Multi-Layer Validation Pipeline</h3>
+    <ul>
+        <li><strong>Schema validation:</strong> Structure and types (Zod, Pydantic, etc.)</li>
+        <li><strong>Content validation:</strong> Factual correctness (knowledge bases, secondary models)</li>
+        <li><strong>Safety validation:</strong> Harmful content filtering (profanity, PII, dangerous instructions)</li>
+        <li><strong>Semantic validation:</strong> Coherence and relevance to original query</li>
+        <li><strong>Constraint validation:</strong> Length, format, style requirements</li>
+    </ul>
+
+    <h3>Retry Strategies</h3>
+    <ul>
+        <li><strong>Exponential backoff:</strong> Increase delay between attempts (1s, 2s, 4s, 8s)</li>
+        <li><strong>Jitter:</strong> Add randomness to prevent thundering herd problems</li>
+        <li><strong>Selective retry:</strong> Only retry certain errors (429 rate limits, 5xx server errors)</li>
+        <li><strong>Validation retry:</strong> Include validation error feedback in next prompt for self-correction</li>
+        <li><strong>Circuit breakers:</strong> Stop retrying after repeated failures</li>
+    </ul>
+
+    <pre>
+async function callWithRetry(fn, maxRetries = 3, baseDelay = 1000) {
+  for (let attempt = 0; attempt &lt; maxRetries; attempt++) {
+    try {
+      const result = await fn();
+      if (validate(result)) return result;
+      // Validation failed - include errors in next attempt
+      throw new Error(`Validation failed: ${JSON.stringify(validationErrors)}`);
+    } catch (err) {
+      if (attempt === maxRetries - 1) throw err;
+      const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 100;
+      await new Promise(r => setTimeout(r, delay));
+    }
+  }
+}</pre>
+
+    <div class="tip">
+        <strong>⚡ Smart Retry Pattern:</strong> When validation fails, include the exact validation errors in the next prompt. This gives the model specific guidance on what to fix, dramatically improving success rates on subsequent attempts — often achieving 95%+ success after 2-3 attempts.
+    </div>
+</div>
+
+<!-- MODULE 35: RAG & VECTOR SYSTEMS -->
+<div class="page chapter" id="ch11">
+    <h2>11. Embeddings — Semantic Representations</h2>
+    <p>Embeddings are numerical representations of text that capture semantic meaning in vector space. They transform words, sentences, or documents into dense vectors where semantic similarity equals vector proximity.</p>
+
+    <div class="metrics-grid">
+        <div class="metric-card"><div class="metric-value">384-3072</div><div class="metric-label">Dimensions</div></div>
+        <div class="metric-card"><div class="metric-value">Cosine</div><div class="metric-label">Similarity Metric</div></div>
+        <div class="metric-card"><div class="metric-value">&gt;0.8</div><div class="metric-label">Highly Similar</div></div>
+        <div class="metric-card"><div class="metric-value">&lt;0.3</div><div class="metric-label">Dissimilar</div></div>
+    </div>
+
+    <pre>
+// Generating embeddings with OpenAI
+import OpenAI from 'openai';
+const openai = new OpenAI();
+
+const embedding = await openai.embeddings.create({
+  model: "text-embedding-3-small",
+  input: "RAG systems combine retrieval and generation for grounded AI responses"
+});
+
+// Returns vector: [0.0123, -0.0345, 0.0789, ...] with 1536 floating point numbers</pre>
+
+    <div class="note">
+        <strong>📊 Popular Embedding Models:</strong> OpenAI text-embedding-3-small (1536 dims, cost-effective), text-embedding-3-large (3072 dims, highest accuracy), Cohere embed-v3, and open-source options like BERT, Sentence Transformers, and Instructor.
+    </div>
+</div>
+
+<div class="page chapter" id="ch12">
+    <h2>12. Vector Databases — Specialized Storage</h2>
+    <p>Vector databases are specialized systems optimized for storing and searching embedding vectors at scale. They enable fast similarity search across millions or billions of vectors.</p>
+
+    <h3>Popular Vector Databases</h3>
+    <ul>
+        <li><strong>Pinecone:</strong> Fully managed, high performance, easy to scale</li>
+        <li><strong>Weaviate:</strong> Open-source, GraphQL API, built-in modules</li>
+        <li><strong>Chroma:</strong> Lightweight, Python-native, great for prototyping</li>
+        <li><strong>Qdrant:</strong> Rust-based, high performance, production-ready</li>
+        <li><strong>Milvus:</strong> Cloud-native, highly scalable, enterprise features</li>
+        <li><strong>pgvector:</strong> PostgreSQL extension, great if already using Postgres</li>
+    </ul>
+
+    <h3>Indexing Algorithms</h3>
+    <ul>
+        <li><strong>HNSW (Hierarchical Navigable Small World):</strong> Fastest search (O(log N)), highest memory usage</li>
+        <li><strong>IVF (Inverted File Index):</strong> Balanced performance, memory efficient</li>
+        <li><strong>Flat:</strong> Exact search, slowest, best for small datasets (&lt;100K vectors)</li>
+    </ul>
+
+    <pre>
+// ChromaDB example
+import { ChromaClient } from 'chromadb';
+
+const client = new ChromaClient();
+const collection = await client.createCollection({
+  name: "documents",
+  metadata: { "hnsw:space": "cosine" }
+});
+
+await collection.add({
+  ids: ["doc1", "doc2"],
+  embeddings: [[0.1, 0.2, ...], [0.3, 0.4, ...]],
+  metadatas: [{ source: "user_manual", date: "2024-01-01" }, { source: "api_docs" }],
+  documents: ["Content of document 1", "Content of document 2"]
+});</pre>
+</div>
+
+<div class="page chapter" id="ch13">
+    <h2>13. RAG Architecture — Retrieval-Augmented Generation</h2>
+    <p>RAG (Retrieval-Augmented Generation) combines information retrieval with LLM generation to produce factual, grounded responses. It's the most effective pattern for reducing hallucinations and incorporating domain-specific knowledge.</p>
+
+    <h3>The Three Stages of RAG</h3>
+    <ul>
+        <li><strong>Indexing:</strong> Documents are chunked → embeddings generated → stored in vector database</li>
+        <li><strong>Retrieval:</strong> User query embedded → similarity search → relevant chunks retrieved</li>
+        <li><strong>Generation:</strong> Retrieved context augments prompt → LLM generates grounded answer</li>
+    </ul>
+
+    <pre>
+// RAG Prompt Template
+&lt;system&gt;
+You are a helpful assistant. Answer based ONLY on the provided context.
+If the answer isn't in the context, say "I don't have that information."
+Cite sources when possible.
+&lt;/system&gt;
+
+&lt;context&gt;
+{retrieved_chunk_1}
+{retrieved_chunk_2}
+{retrieved_chunk_3}
+&lt;/context&gt;
+
+&lt;question&gt;{user_query}&lt;/question&gt;</pre>
+
+    <div class="note">
+        <strong>🎯 RAG Benefits:</strong> 40-60% reduction in hallucinations compared to standalone LLMs. Enables citation of sources. Updates knowledge without retraining. Handles proprietary/domain-specific data naturally. More cost-effective than fine-tuning.
+    </div>
+
+    <h3>Advanced RAG Techniques</h3>
+    <ul>
+        <li><strong>HyDE:</strong> Generate hypothetical answer first, then retrieve based on that</li>
+        <li><strong>Self-RAG:</strong> Model critiques its own retrieval and generation</li>
+        <li><strong>Multi-step RAG:</strong> Iterative retrieval for complex, multi-hop queries</li>
+        <li><strong>Reranking:</strong> Use cross-encoders to refine top-k retrieval results</li>
+        <li><strong>Query rewriting:</strong> Enhance user queries before embedding for better retrieval</li>
+    </ul>
+</div>
+
+<div class="page chapter" id="ch14">
+    <h2>14. Search Strategies & Optimization</h2>
+    <p>Optimizing retrieval is critical for RAG quality. The right search strategy can dramatically improve answer relevance.</p>
+
+    <h3>Search Types</h3>
+    <ul>
+        <li><strong>Semantic Search:</strong> Vector similarity for meaning-based retrieval (finds conceptually similar content)</li>
+        <li><strong>Keyword Search:</strong> BM25, TF-IDF for exact term matching (finds specific phrases)</li>
+        <li><strong>Hybrid Search:</strong> Combines both approaches for best results — typically using a weighted combination (alpha parameter balancing semantic vs keyword)</li>
+        <li><strong>Multimodal Search:</strong> Extends to images, audio, and other data types</li>
+    </ul>
+
+    <h3>Optimization Techniques</h3>
+    <ul>
+        <li><strong>Chunking Strategy:</strong> 256-1024 tokens with 10-20% overlap maintains coherence across boundaries. For code, consider chunking by functions/classes rather than fixed token counts.</li>
+        <li><strong>Metadata Filtering:</strong> Pre-filter by date, source, type before vector search</li>
+        <li><strong>Query Expansion:</strong> Rewrite or enhance queries for better retrieval (e.g., generate multiple query variations)</li>
+        <li><strong>Parent Document Retrieval:</strong> Retrieve a chunk, return larger parent context for better LLM comprehension</li>
+        <li><strong>Reranking:</strong> Apply cross-encoder models to refine top-k results</li>
+    </ul>
+
+    <pre>
+// Hybrid Search Example
+const results = await vectorDB.search({
+  query: "How do I implement RAG with streaming?",
+  hybrid: { 
+    alpha: 0.5,  // 0 = pure keyword, 1 = pure semantic
+    weights: { semantic: 0.6, keyword: 0.4 }
+  },
+  limit: 10,
+  filters: { 
+    date: { $gte: "2024-01-01" }, 
+    source: { $in: ["documentation", "blog"] }
+  },
+  rerank: true  // Apply cross-encoder reranking
+});</pre>
+
+    <div class="tip">
+        <strong>💡 Chunking Best Practices:</strong> 512 tokens is optimal for most use cases. Add 10-20% overlap between chunks to prevent information loss at boundaries. For code, chunk by functions/classes. For long documents, consider hierarchical chunking (sections first, then paragraphs).
+    </div>
+
+    <div class="note">
+        <strong>📈 RAG Success Metrics to Track:</strong> Precision@k, Recall@k, MRR (Mean Reciprocal Rank), NDCG (Normalized Discounted Cumulative Gain), user satisfaction scores, and hallucination rates. Aim for &gt;85% retrieval relevance and &lt;5% hallucination rate in production.
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <p>LLM Fundamentals: A Complete Guide to Large Language Models</p>
+    <p>Tokens · Temperature · Hallucination · Context · Prompt Engineering · Structured Outputs · RAG · Vector Databases</p>
+    <p style="margin-top: 10px;">Production-ready patterns · Best practices · Practical code examples</p>
+</div>
+
+</div>
+
+</body>
+</html>
